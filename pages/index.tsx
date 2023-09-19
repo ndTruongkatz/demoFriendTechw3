@@ -14,6 +14,17 @@ import { getStateUser } from "./api/user";
 import Chart from "../components/trading/Chart";
 
 import { Global } from "../state/global";
+import Discover from "components/trading/Discover";
+
+//API
+import { getLeaderboardUsers } from "./api/stats/leaderboard";
+import type { UserInfo } from "components/User";
+import RecentTrades from "components/trading/RecentTrades";
+import { type TradeWithTwitterUser, getLatestTrades } from "./api/stats/trades";
+import Favorites from "components/trading/Favorites";
+import RecentTokenTrades from "components/trading/RecentTokenTrades";
+import NewestUsers from "components/trading/NewestUsers";
+import Tabbar from "components/Tabbar";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 const BuySell = dynamic(() => import("../components/trading/BuySell"), {
@@ -24,7 +35,18 @@ const Holdings = dynamic(() => import("../components/trading/Holdings"), {
 });
 
 
-function Home({user}: { user: StateUser;}) {
+function Home({
+  newestUsers,
+  user,
+  leaderboardUsers,
+  latestTrades
+}: { 
+  newestUsers: UserInfo[];
+  user: StateUser;
+  leaderboardUsers: UserInfo[];
+  latestTrades: TradeWithTwitterUser[];
+}) 
+{
   const layout = {
     md: [
       { i: "chart", x: 0, y: 0.6, w: 24, h: 3 },
@@ -38,7 +60,7 @@ function Home({user}: { user: StateUser;}) {
       { i: "newest_users", x: 18.6, y: 0, w: 24, h: 3 },
     ],
     lg: [
-      { i: "chart", x: 0, y: 0, w: 15, h: 3 },
+      { i: "chart", x: 0, y: 0, w: 20, h: 3 },
       { i: "buy_sell", x: 20, y: 0, w: 8, h: 3 },
       { i: "discover", x: 28, y: 0, w: 8, h: 3 },
       { i: "recent_trades", x: 0, y: 6, w: 28, h: 3 },
@@ -60,8 +82,9 @@ function Home({user}: { user: StateUser;}) {
 
       {/* Discover */}
       <div key="discover">
+          <Tabbar />
           {/* <Discover leaderboard={leaderboardUsers} /> */}
-          Discover
+          
       </div>
 
       {/* Trading chart */}
@@ -76,26 +99,22 @@ function Home({user}: { user: StateUser;}) {
 
       {/* Recent trades */}
       <div key="recent_trades">
-          {/* <RecentTrades trades={latestTrades} /> */}
-          recent_trades
+        <RecentTrades trades={latestTrades} />
       </div>
 
       {/* Favorites */}
       <div key="favorites">
-          {/* <Favorites /> */}
-          Favorites
+        <Favorites />
       </div>
 
       {/* Recent token trades */}
       <div key="recent_token_trades">
-          {/* <RecentTokenTrades /> */}
-          RecentTokenTrades
+        <RecentTokenTrades />
       </div>
 
       {/* Newest users */}
       <div key="newest_users">
-          {/* <NewestUsers users={newestUsers} /> */}
-          NewestUsers
+        <NewestUsers users={newestUsers} />
       </div>
 
       </ResponsiveGridLayout>
